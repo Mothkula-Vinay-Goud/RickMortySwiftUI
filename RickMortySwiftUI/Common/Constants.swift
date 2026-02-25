@@ -5,11 +5,19 @@
 //  Created by Vinay Goud Mothkula on 2/24/26.
 //
 
-enum Server : String {
-    case urlString = "https://rickandmortyapi.com/api/character/?name="
+enum Server {
+    case characters(name: String)
+    
+    var url: String {
+        switch self {
+        case .characters(let name):
+            return "https://rickandmortyapi.com/api/character/?name=\(name)"
+        }
+    }
 }
-enum CharacterSearchResult {
-    case success([Character])
-    case empty(String)
-    case failure(String)
+enum APIState<T> {
+    case loading
+    case empty
+    case failed(Error)
+    case complete(T)
 }

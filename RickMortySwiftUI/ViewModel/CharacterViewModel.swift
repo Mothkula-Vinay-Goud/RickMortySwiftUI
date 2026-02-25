@@ -6,19 +6,15 @@
 //
 
 import Foundation
-
 @Observable
 class CharacterViewModel {
     
     var characters: [Character] = []
     var searchText: String = ""
-    var isLoading: Bool = false
-    var errorMessage: String?
+    var state: APIState<[Character]> = .loading
     
-    // Create an instance of NetworkManager
     private let networkManager = NetworkManager()
     
-    // This function handles the search logic
     func searchCharacters() async {
         
         guard !searchText.isEmpty else {
@@ -26,25 +22,32 @@ class CharacterViewModel {
             return
         }
         
-        isLoading = true
-        errorMessage = nil
+        state = .loading
         
-        let result = await networkManager.fetchCharacters(name: searchText.lowercased())
+        let result: APIState<CharacterResponse> =
+            await networkManager.execute(Server.characters(name: searchText.lowercased()).url)
         
         switch result {
             
-        case .success(let characters):
-            self.characters = characters
+        case .complete(let response):
+            if response.results.isEmpty {
+                state = .empty
+                characters = []
+            } else {
+                characters = response.results
+                state = .complete(response.results)
+            }
             
-        case .empty(let message):
-            self.characters = []
-            self.errorMessage = message
+        case .empty:
+            characters = []
+            state = .empty
             
-        case .failure(let message):
-            self.characters = []
-            self.errorMessage = message
+        case .failed(let error):
+            characters = []
+            state = .failed(error)
+            
+        case .loading:
+            break
         }
-        
-        isLoading = false
     }
 }

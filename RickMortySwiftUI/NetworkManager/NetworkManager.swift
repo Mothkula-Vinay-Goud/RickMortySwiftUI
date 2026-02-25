@@ -5,18 +5,16 @@
 //  Created by Vinay Goud Mothkula on 2/24/26.
 //
 
-import Foundation
+    import Foundation
 
 
 class NetworkManager {
     
-    func fetchCharacters(name: String) async -> CharacterSearchResult {
+    func execute<T: Decodable>(_ urlString: String) async -> APIState<T> {
         
-        let urlString = Server.urlString.rawValue + name
-        
-        guard let encodedString = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-              let url = URL(string: encodedString) else {
-            return .failure("Invalid URL")
+        guard let encoded = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: encoded) else {
+            return .failed(URLError(.badURL))
         }
         
         do {
@@ -24,19 +22,18 @@ class NetworkManager {
             
             guard let httpResponse = response as? HTTPURLResponse,
                   httpResponse.statusCode == 200 else {
-                return .failure("Server error")
+                return .failed(URLError(.badServerResponse))
             }
             
-            let decoded = try JSONDecoder().decode(CharacterResponse.self, from: data)
-            
-            if decoded.results.isEmpty {
-                return .empty("No characters found")
+            if data.isEmpty {
+                return .empty
             }
             
-            return .success(decoded.results)
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return .complete(decoded)
             
         } catch {
-            return .failure(error.localizedDescription)
+            return .failed(error)
         }
     }
 }

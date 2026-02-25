@@ -17,27 +17,28 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // The list of characters
-                if viewModel.isLoading {
-                    // Show loading indicator
-                    ProgressView("Please Wait...")
-                        .progressViewStyle(CircularProgressViewStyle())
-                    Spacer()
-                } else {
+                
+                switch viewModel.state {
                     
-                    if let error = viewModel.errorMessage {
-                        Text(error)
-                            .onAppear {
-                                showAlert = true   // Trigger immediately
+                case .loading:
+                    ProgressView("Loading...")
+                    
+                case .empty:
+                    Text("No Characters Found")
+                        .foregroundColor(.gray)
+                    
+                case .failed:
+                    VStack {
+                        Text("Something went wrong")
+                        
+                        Button("Try Again") {
+                            Task {
+                                await viewModel.searchCharacters()
                             }
-                            .alert("Hello", isPresented: $showAlert) {
-                                Button("OK", role: .cancel) { }
-                            } message: {
-                                Text("There was an Error While Fetching the Data. Please Try Again Later.")
-                            }
+                        }
                     }
                     
-                    // Show the list of characters
+                case .complete:
                     List(viewModel.characters) { character in
                         NavigationLink {
                             CharacterDetailView(character: character)
@@ -49,21 +50,16 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Rick and Morty")
-            .searchable(text: $viewModel.searchText, prompt: "Search characters...")
-            .onChange(of: viewModel.searchText) { oldValue, newValue in
-                // Search after each keystroke
+            .searchable(text: $viewModel.searchText)
+            .onChange(of: viewModel.searchText) { _, _ in
                 Task {
                     await viewModel.searchCharacters()
                 }
             }
             .onAppear {
-                // Only load default data on first launch
-                if !hasLoadedInitialData {
-                    hasLoadedInitialData = true
-                    viewModel.searchText = "ri"
-                    Task {
-                        await viewModel.searchCharacters()
-                    }
+                viewModel.searchText = "rick"
+                Task {
+                    await viewModel.searchCharacters()
                 }
             }
         }
