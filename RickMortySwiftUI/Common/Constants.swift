@@ -6,7 +6,7 @@
 //
 
 enum Server : String {
-    case urlString = "https://rickandmortyapi.com/api"
+    case urlString = "https://rickandmortyapi.com/api/character/?name="
 }
 enum CharacterSearchResult {
     case success([Character])

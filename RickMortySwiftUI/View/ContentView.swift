@@ -21,7 +21,7 @@ struct ContentView: View {
                 if viewModel.isLoading {
                     // Show loading indicator
                     ProgressView("Please Wait...")
-                                .progressViewStyle(CircularProgressViewStyle())
+                        .progressViewStyle(CircularProgressViewStyle())
                     Spacer()
                 } else {
                     
@@ -36,8 +36,7 @@ struct ContentView: View {
                                 Text("There was an Error While Fetching the Data. Please Try Again Later.")
                             }
                     }
-
-                    }
+                    
                     // Show the list of characters
                     List(viewModel.characters) { character in
                         NavigationLink {
@@ -69,6 +68,7 @@ struct ContentView: View {
             }
         }
     }
+}
 
 
 // MARK: - Character Row
