@@ -25,7 +25,7 @@ struct Info: Codable {
 
 // MARK: - Character
 // Represents a single Rick and Morty character
-struct Character: Codable, Identifiable {
+struct Character: Codable, Identifiable,Hashable {
     let id: Int
     let name: String
     let status: String
@@ -38,6 +38,6 @@ struct Character: Codable, Identifiable {
 
 // MARK: - Origin
 // Represents where the character is from
-struct Origin: Codable {
+struct Origin: Codable, Hashable {
     let name: String
 }

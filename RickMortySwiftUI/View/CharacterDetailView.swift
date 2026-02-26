@@ -18,7 +18,7 @@ struct CharacterDetailView: View {
                 AsyncImage(url: URL(string: character.image)) { image in
                     image.resizable()
                 } placeholder: {
-                    Color.gray
+                    ProgressView()
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 300)

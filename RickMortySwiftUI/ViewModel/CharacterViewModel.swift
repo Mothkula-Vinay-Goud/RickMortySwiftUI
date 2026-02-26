@@ -6,14 +6,16 @@
 //
 
 import Foundation
-@Observable
-class CharacterViewModel {
+import Combine
+
+class CharacterViewModel: ObservableObject {
     
-    var characters: [Character] = []
-    var searchText: String = ""
-    var state: APIState<[Character]> = .loading
+    @Published var characters: [Character] = []
+    @Published var searchText: String = ""
+    @Published var state: APIState<[Character]> = .loading
     
     private let networkManager = NetworkManager()
+    
     
     func searchCharacters() async {
         
