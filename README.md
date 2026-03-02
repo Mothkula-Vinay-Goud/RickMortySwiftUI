@@ -125,6 +125,7 @@ iOS Developer | SwiftUI | UIKit | MVVM
 
 ⭐ If you like this project, feel free to star the repository!
 ## Demo
-![Simulator Screen Recording - iPad (A16) - 2026-02-26 at 14 34 16](https://github.com/user-attachments/assets/4307682d-8b9c-44de-a4aa-3fd66daff69f)   ![Simulator Screen Recording - iPhone 17 Pro - 2026-02-25 at 15 50 31](https://github.com/user-attachments/assets/6d2fba8b-9639-48dc-9f2c-41d9f1ca3da9)
+
+iPad: ![Simulator Screen Recording - iPad (A16) - 2026-02-26 at 14 34 16](https://github.com/user-attachments/assets/4307682d-8b9c-44de-a4aa-3fd66daff69f)   iPhone: ![Simulator Screen Recording - iPhone 17 Pro - 2026-02-25 at 15 50 31](https://github.com/user-attachments/assets/6d2fba8b-9639-48dc-9f2c-41d9f1ca3da9)
 
 
